@@ -5,10 +5,10 @@ import warnings
 from distutils.version import LooseVersion
 import project_tests as tests
 
-EPOCHS = 8
+EPOCHS = 25
 LEARNING_RATE = 0.0001
 KEEP_PROB = 0.5
-BATCH_SIZE = 1
+BATCH_SIZE = 5
 
 # Check TensorFlow Version
 assert LooseVersion(tf.__version__) >= LooseVersion('1.0'), 'Please use TensorFlow version 1.0 or newer.  You are using {}'.format(tf.__version__)

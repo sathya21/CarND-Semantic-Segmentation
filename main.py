@@ -8,7 +8,7 @@ import project_tests as tests
 EPOCHS = 25
 LEARNING_RATE = 0.0001
 KEEP_PROB = 0.5
-BATCH_SIZE = 2
+BATCH_SIZE = 5
 
 # Check TensorFlow Version
 assert LooseVersion(tf.__version__) >= LooseVersion('1.0'), 'Please use TensorFlow version 1.0 or newer.  You are using {}'.format(tf.__version__)
@@ -42,7 +42,6 @@ def load_vgg(sess, vgg_path):
     w1 = graph.get_tensor_by_name(vgg_input_tensor_name)
     keep = graph.get_tensor_by_name(vgg_keep_prob_tensor_name)
     layer3 = graph.get_tensor_by_name(vgg_layer3_out_tensor_name)
-    print('keep {}',keep)
     layer4 = graph.get_tensor_by_name(vgg_layer4_out_tensor_name)
     layer7 = graph.get_tensor_by_name(vgg_layer7_out_tensor_name)
     
@@ -64,7 +63,6 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     output = tf.layers.conv2d_transpose(conv_1x1, num_classes, 4, 2,padding = 'same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3) )
     print(tf.Print(output, [tf.shape(output)[1:3]]))
     
-    print('hi')
     layer4_conv = tf.layers.conv2d(vgg_layer4_out, num_classes, 1, padding = 'same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     output = tf.add(output, layer4_conv)
     output = tf.layers.conv2d_transpose(output, num_classes, 4, strides=(2, 2),padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
@@ -114,7 +112,6 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     # TODO: Implement function
     print('inside train')
     sess.run(tf.global_variables_initializer())    
-    print('keep {}',keep_prob)
     for epoch in range(epochs):
         for images,labels in get_batches_fn(batch_size):
             _, l = sess.run(

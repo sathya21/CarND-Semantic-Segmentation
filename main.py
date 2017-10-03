@@ -59,16 +59,16 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
         :return: The Tensor for the last layer of output
         """
     # TODO: Implement function
-    conv_1x1 = tf.layers.conv2d(vgg_layer7_out, num_classes, 1, padding = 'same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
-    output = tf.layers.conv2d_transpose(conv_1x1, num_classes, 4, 2,padding = 'same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3) )
+    conv_1x1 = tf.layers.conv2d(vgg_layer7_out, num_classes, 1, padding = 'same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3),kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+    output = tf.layers.conv2d_transpose(conv_1x1, num_classes, 4, 2,padding = 'same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3),kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
     print(tf.Print(output, [tf.shape(output)[1:3]]))
     
-    layer4_conv = tf.layers.conv2d(vgg_layer4_out, num_classes, 1, padding = 'same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    layer4_conv = tf.layers.conv2d(vgg_layer4_out, num_classes, 1, padding = 'same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3),kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
     output = tf.add(output, layer4_conv)
-    output = tf.layers.conv2d_transpose(output, num_classes, 4, strides=(2, 2),padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
-    layer3_conv = tf.layers.conv2d(vgg_layer3_out, num_classes, 1, padding = 'same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3)) 
+    output = tf.layers.conv2d_transpose(output, num_classes, 4, strides=(2, 2),padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3),kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+    layer3_conv = tf.layers.conv2d(vgg_layer3_out, num_classes, 1, padding = 'same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3),kernel_initializer=tf.truncated_normal_initializer(stddev=0.01)) 
     output = tf.add(output, layer3_conv)
-    output = tf.layers.conv2d_transpose(output, num_classes, 16, strides=(8, 8),padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    output = tf.layers.conv2d_transpose(output, num_classes, 16, strides=(8, 8),padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3),kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
     
     return output
 tests.test_layers(layers)
